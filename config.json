@@ -1,0 +1,37 @@
+{
+  "TheMovieDatabase": {
+    "api_key" : "",
+    "language" : "fr-FR"
+  },
+  "regex_parsers": {
+    "movie" : {
+      "title" : [
+        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "EXTENDED", "THEATRICAL EDITION" ] }
+      ],
+      "year" : [
+        { "regex" : "(19|20)\\d{2}", "remove" : [] }
+      ]
+    },
+    "subtitle" : {
+      "title" : [
+        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "EXTENDED", "THEATRICAL EDITION" ] }
+      ],
+      "year" : [
+        { "regex" : "(19|20)\\d{2}", "remove" : [] }
+      ],
+      "language" : [
+        { "regex" : "[\\.\\-\\s](eng|ENG|Eng|fr|FR|Fr)[\\.\\-\\s]", "remove" : [ ".", "-" ] }
+      ]
+    }
+  },
+  "extensions": {
+    "movie" :  [
+      ".mp4",
+      ".mkv"
+    ],
+    "subtitle" : [
+      ".srt"
+    ]
+  },
+  "debug" : true
+}
