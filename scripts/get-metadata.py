@@ -4,12 +4,19 @@
 from optparse import OptionParser
 
 import json
+import time
+import os
 
 from helpers import Configuration
 from helpers import TheMovieDatabase
 
 
 TMDB = TheMovieDatabase.TMDB_Handle(Configuration.TMDB.get("api_key"), Configuration.TMDB.get("language"), Configuration.TMDB.isDebugOn())
+
+MOVIE_EXTENSIONS = Configuration.loadExtensions("movie")
+SUBTITLE_EXTENSIONS = Configuration.loadExtensions("subtitle")
+
+PARSERS = Configuration.loadParsers()
 
 # ============================================================================== #
 
@@ -63,14 +70,53 @@ def get_metadata(query, year="any"):
 
 # ============================================================================== #
 
+def parse(string, groupname):
+  values = {}
+  if groupname in PARSERS:
+    for key, parsers in PARSERS[groupname].items():
+      for parser in parsers:
+        s = parser.parse(string)
+        if s:
+          values[key] = s
+          break
+  if ("year" in values) and ("title" in values) and (values["year"] in values["title"]):
+    values["title"] = values["title"].split(values["year"])[0].strip()
+  if "title" in values:
+    return values
+  else:
+    return {}
+
+# ============================================================================== #
+
 def main():
-  parser = OptionParser(usage="usage: %prog [options] directory [...directory]", version="%prog 1.0")
+  parser = OptionParser(usage="usage: %prog [options] input [...input]", version="%prog 1.0")
   (options, paths) = parser.parse_args()
-  
-  metadata = get_metadata("Jack+Reacher")
-  if metadata:
-    json_dump = json.dumps(metadata, indent=2)
-    print(json_dump)
+  if len(paths) < 1:
+    print("wrong number of arguments (use --help to display usage and options)")
+  else:
+    movies = []
+    movie_files = []
+    for path in paths[0:]:
+      for root, directories, files in os.walk(path):
+        # find movie and subtitle files in the directory
+        for file in files:
+          for ext in MOVIE_EXTENSIONS:
+            if ext in file:
+              movie_files.append({ "root" : root, "file" : file})
+    count = 0
+    # parse movie filenames
+    for movie in movie_files:
+      count += 1
+      movie_details = parse(movie["file"], "movie")
+      if "title" in movie_details:
+        print("retrieving metadata (" + str(count) + "/" + str(len(movie_files)) + ")")
+        time.sleep(0.500)
+        # print(json.dumps(movie_details, indent=2))
+        metadata = get_metadata(movie_details["title"], movie_details["year"] if "year" in movie_details else "any")
+        ext = movie["file"].split(".")[-1]
+        output = os.path.join(movie["root"], movie["file"][:-len(ext)] + "metadata.json")
+        with open(output, "w") as f:
+          f.write(json.dumps(metadata, indent=2))
 
 # ============================================================================== #
 

@@ -1,12 +1,13 @@
 {
   "TheMovieDatabase": {
     "api_key" : "",
-    "language" : "fr-FR"
+    "language" : "fr-FR",
+    "image_endpoint" : "https://image.tmdb.org/t/p"
   },
   "regex_parsers": {
     "movie" : {
       "title" : [
-        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "EXTENDED", "THEATRICAL EDITION" ] }
+        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "Brrip", "EXTENDED", "THEATRICAL EDITION" ] }
       ],
       "year" : [
         { "regex" : "(19|20)\\d{2}", "remove" : [] }
@@ -14,7 +15,7 @@
     },
     "subtitle" : {
       "title" : [
-        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "EXTENDED", "THEATRICAL EDITION" ] }
+        { "regex" : "^((\\d+|[a-zA-Z\\']+)[\\.\\-\\s])*", "remove" : [ ".", "-", "BrRip", "Brrip", "EXTENDED", "THEATRICAL EDITION" ] }
       ],
       "year" : [
         { "regex" : "(19|20)\\d{2}", "remove" : [] }
@@ -33,5 +34,5 @@
       ".srt"
     ]
   },
-  "debug" : true
+  "debug" : false
 }
