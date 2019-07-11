@@ -102,21 +102,27 @@ def main():
         for file in files:
           for ext in MOVIE_EXTENSIONS:
             if ext in file:
-              movie_files.append({ "root" : root, "file" : file})
+                metadata_file = os.path.join(root, file.split(".")[0] + ".metadata.json")
+                movie_files.append({ "root" : root, "file" : file, "metadata_present" : os.path.isfile(metadata_file)})
     count = 0
     # parse movie filenames
-    for movie in movie_files:
+    for movie in sorted(movie_files, key=lambda m : m["file"]):
       count += 1
       movie_details = parse(movie["file"], "movie")
-      if "title" in movie_details:
-        print("retrieving metadata (" + str(count) + "/" + str(len(movie_files)) + ")")
+      if movie["metadata_present"]:
+        print("metadata already exists for " + movie_details["title"] + " (" + str(count) + "/" + str(len(movie_files)) + ")")
+      elif "title" in movie_details:
+        print("retrieving metadata for " + movie_details["title"] + " (" + str(count) + "/" + str(len(movie_files)) + ")")
         time.sleep(0.500)
         # print(json.dumps(movie_details, indent=2))
         metadata = get_metadata(movie_details["title"], movie_details["year"] if "year" in movie_details else "any")
-        ext = movie["file"].split(".")[-1]
-        output = os.path.join(movie["root"], movie["file"][:-len(ext)] + "metadata.json")
-        with open(output, "w") as f:
-          f.write(json.dumps(metadata, indent=2))
+        if metadata:
+          ext = movie["file"].split(".")[-1]
+          output = os.path.join(movie["root"], movie["file"][:-len(ext)] + "metadata.json")
+          with open(output, "w") as f:
+            f.write(json.dumps(metadata, indent=2))
+      else:
+        print("title not recognized for " + movie["file"] + "(" + str(count) + "/" + str(len(movie_files)) + ")")
 
 # ============================================================================== #
 

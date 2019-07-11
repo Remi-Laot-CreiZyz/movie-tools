@@ -37,7 +37,7 @@ def main():
       print("retrieving image for " + name + " (" + str(count) + "/" + str(len(movies)) + ")")
       with open(os.path.join(root, file), "r") as f:
         metadata = json.load(f)
-        if "poster" in metadata:
+        if metadata and "poster" in metadata:
           poster = metadata["poster"]
           poster_extension = poster.split(".")[-1]
           output = os.path.join(root, name + "." + poster_extension)

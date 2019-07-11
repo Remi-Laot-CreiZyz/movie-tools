@@ -72,7 +72,7 @@ def main():
           subtitle_matches = []
           for subtitle in subtitle_files:
             subtitle_details = parse(subtitle, "subtitle")
-            if match_movie_with_subtitle(movie_details, subtitle_details):
+            if len(movie_files) == 1 or match_movie_with_subtitle(movie_details, subtitle_details):
               subtitle_details["file"] = os.path.join(root, subtitle)
               subtitle_matches.append(subtitle_details)
           movie_details["subtitle_matches"] = subtitle_matches

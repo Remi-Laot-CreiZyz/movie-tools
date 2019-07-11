@@ -1,6 +1,6 @@
 {
   "TheMovieDatabase": {
-    "api_key" : "",
+    "api_key" : "70c8db56b3807f53de9d6ee20f716aa1",
     "language" : "fr-FR",
     "image_endpoint" : "https://image.tmdb.org/t/p"
   },
@@ -28,7 +28,9 @@
   "extensions": {
     "movie" :  [
       ".mp4",
-      ".mkv"
+      ".mkv",
+      ".avi",
+      "iso"
     ],
     "subtitle" : [
       ".srt"
