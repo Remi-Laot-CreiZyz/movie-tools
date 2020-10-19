@@ -111,7 +111,7 @@ def main():
       movie_details = parse(movie["file"], "movie")
       if movie["metadata_present"]:
         print("metadata already exists for " + movie_details["title"] + " (" + str(count) + "/" + str(len(movie_files)) + ")")
-      elif "title" in movie_details:
+      elif "title" in movie_details and movie_details["title"] != "":
         print("retrieving metadata for " + movie_details["title"] + " (" + str(count) + "/" + str(len(movie_files)) + ")")
         time.sleep(0.500)
         # print(json.dumps(movie_details, indent=2))

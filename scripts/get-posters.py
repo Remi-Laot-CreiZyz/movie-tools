@@ -39,15 +39,16 @@ def main():
         metadata = json.load(f)
         if metadata and "poster" in metadata:
           poster = metadata["poster"]
-          poster_extension = poster.split(".")[-1]
-          output = os.path.join(root, name + "." + poster_extension)
-          image_url = image_endpoint + "/original" + poster
-          with open(output, "wb") as out:
-            response = requests.get(image_url)
-            if response.ok:
-              out.write(response.content)
-            else:
-              print("could not retrieve " + image_url)
+          if poster:
+            poster_extension = poster.split(".")[-1]
+            output = os.path.join(root, name + "." + poster_extension)
+            image_url = image_endpoint + "/original" + poster
+            with open(output, "wb") as out:
+              response = requests.get(image_url)
+              if response.ok:
+                out.write(response.content)
+              else:
+                print("could not retrieve " + image_url)
 
 
 # ============================================================================== #

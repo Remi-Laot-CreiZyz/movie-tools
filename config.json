@@ -28,9 +28,10 @@
   "extensions": {
     "movie" :  [
       ".mp4",
+      ".m4v",
       ".mkv",
       ".avi",
-      "iso"
+      ".iso"
     ],
     "subtitle" : [
       ".srt"
